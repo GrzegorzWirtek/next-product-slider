@@ -1,3 +1,4 @@
 :root {
-  --slider-width: 100vw;
+  --slider-width-mobile: 90vw;
+  --slider-width: 40vw;
 }

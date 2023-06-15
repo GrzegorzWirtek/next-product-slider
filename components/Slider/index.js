@@ -5,10 +5,13 @@ import left from '/public/icons/arrow-left.svg';
 import right from '/public/icons/arrow-right.svg';
 
 export default function Slider({ images }) {
+	const minimumPxShiftToChangeSlide = 80;
+	const transitionTimeSeconds = 0.2;
+
 	const wrapperRef = useRef();
 	const isClicked = useRef(false);
 	const startMousePosition = useRef(0);
-	const isMoveLeft = useRef(true);
+	const isMoveLeft = useRef(null);
 	const shift = useRef(0);
 	const slideNumberRef = useRef(0);
 	const [currentSlide, setCurrentSlide] = useState(slideNumberRef.current);
@@ -31,8 +34,14 @@ export default function Slider({ images }) {
 			shift.current * slideNumberRef.current;
 		wrapperRef.current.style.transform = `translateX(${movement}px)`;
 
-		isMoveLeft.current =
-			clientX - startMousePosition.current < 1 ? true : false;
+		if (clientX - startMousePosition.current < -minimumPxShiftToChangeSlide) {
+			isMoveLeft.current = 'left';
+		} else if (
+			clientX - startMousePosition.current >
+			minimumPxShiftToChangeSlide
+		) {
+			isMoveLeft.current = 'right';
+		} else isMoveLeft.current = null;
 	};
 
 	const recalculateSize = (e) => {
@@ -41,14 +50,13 @@ export default function Slider({ images }) {
 
 	const slideElement = useCallback(
 		(moveLeft) => {
-			console.log('slide element', moveLeft);
 			const wrapper = wrapperRef.current;
-			wrapper.style.transition = '0.2s';
+			wrapper.style.transition = `${transitionTimeSeconds}s`;
 
-			if (moveLeft && slideNumberRef.current < images.length - 1) {
+			if (moveLeft === 'left' && slideNumberRef.current < images.length - 1) {
 				slideNumberRef.current++;
 				setCurrentSlide(slideNumberRef.current);
-			} else if (!moveLeft && slideNumberRef.current > 0) {
+			} else if (moveLeft === 'right' && slideNumberRef.current > 0) {
 				slideNumberRef.current--;
 				setCurrentSlide(slideNumberRef.current);
 			}
@@ -58,7 +66,7 @@ export default function Slider({ images }) {
 
 			setTimeout(() => {
 				wrapper.style.transition = '0s';
-			}, 200);
+			}, transitionTimeSeconds * 1000);
 		},
 		[images.length],
 	);
@@ -119,8 +127,8 @@ export default function Slider({ images }) {
 
 			{currentSlide && (
 				<button
-					onClick={() => slideElement(false)}
-					onTouchEnd={() => slideElement(false)}
+					onClick={() => slideElement('right')}
+					onTouchEnd={() => slideElement('right')}
 					className={`${style.slider__btn} ${style.slider__btn__left}`}>
 					<Image
 						src={left}
@@ -133,8 +141,8 @@ export default function Slider({ images }) {
 
 			{currentSlide < images.length - 1 && (
 				<button
-					onClick={() => slideElement(true)}
-					onTouchEnd={() => slideElement(true)}
+					onClick={() => slideElement('left')}
+					onTouchEnd={() => slideElement('left')}
 					className={`${style.slider__btn} ${style.slider__btn__right}`}>
 					<Image
 						src={right}
