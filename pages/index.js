@@ -1,7 +1,16 @@
 import Slider from '@/components/Slider';
 import Head from 'next/head';
+import p1 from 'public/images/p1.png';
+import p2 from 'public/images/p2.png';
+import p3 from 'public/images/p3.png';
 
 export default function Home() {
+	const images = [
+		{ src: p1, alt: 'Description 1' },
+		{ src: p2, alt: 'Description 2' },
+		{ src: p3, alt: 'Description 3' },
+	];
+
 	return (
 		<>
 			<Head>
@@ -11,7 +20,7 @@ export default function Home() {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 			<main>
-				<Slider />
+				<Slider images={images} />
 			</main>
 		</>
 	);
