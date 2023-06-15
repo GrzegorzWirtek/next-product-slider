@@ -36,6 +36,8 @@
   outline: none;
   border: none;
   border-radius: 10px;
+  width: 55px;
+  height: 60px;
   background-color: transparent;
   background-color: rgba(255, 255, 255, 0.508);
   cursor: pointer;
@@ -49,4 +51,9 @@
 
 .slider__btn__right {
   right: 0;
+}
+
+.slider__btn__img {
+  height: 100%;
+  width: 100%;
 }

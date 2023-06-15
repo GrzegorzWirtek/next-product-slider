@@ -15,20 +15,24 @@ export default function Slider({ images }) {
 
 	const handleMouseDown = (e) => {
 		e.preventDefault();
+		if (e.target.dataset.button === 'nav') return;
 		isClicked.current = true;
-		startMousePosition.current = e.clientX;
+		startMousePosition.current = e.clientX || e.touches[0].pageX;
 	};
 
 	const handleMouseMove = (e) => {
 		e.preventDefault();
 		if (!isClicked.current) return;
+
+		const clientX = e.clientX || e.touches[0].pageX;
 		const movement =
-			e.clientX -
+			clientX -
 			startMousePosition.current -
 			shift.current * slideNumberRef.current;
 		wrapperRef.current.style.transform = `translateX(${movement}px)`;
+
 		isMoveLeft.current =
-			e.clientX - startMousePosition.current < 0 ? true : false;
+			clientX - startMousePosition.current < 1 ? true : false;
 	};
 
 	const recalculateSize = (e) => {
@@ -37,8 +41,9 @@ export default function Slider({ images }) {
 
 	const slideElement = useCallback(
 		(moveLeft) => {
+			console.log('slide element', moveLeft);
 			const wrapper = wrapperRef.current;
-			wrapper.style.transition = '0.2s ease-in-out';
+			wrapper.style.transition = '0.2s';
 
 			if (moveLeft && slideNumberRef.current < images.length - 1) {
 				slideNumberRef.current++;
@@ -52,13 +57,13 @@ export default function Slider({ images }) {
 			shift.current = wrapper.offsetHeight;
 
 			setTimeout(() => {
-				wrapper.style.transition = '0s ease-in-out';
+				wrapper.style.transition = '0s';
 			}, 200);
 		},
 		[images.length],
 	);
 
-	const handleUp = useCallback(
+	const handleMouseUp = useCallback(
 		(e) => {
 			e.preventDefault();
 			isClicked.current = false;
@@ -72,29 +77,29 @@ export default function Slider({ images }) {
 		const wrapper = wrapperRef.current;
 
 		wrapper.addEventListener('mousedown', handleMouseDown);
-		window.addEventListener('mouseup', handleUp);
+		window.addEventListener('mouseup', handleMouseUp);
 		wrapper.addEventListener('mousemove', handleMouseMove);
 
-		// wrapper.addEventListener('touchstart', handleTouchDown);
-		// window.addEventListener('touchend', handleUp);
-		// wrapper.addEventListener('touchmove', handleTouchMove);
+		wrapper.addEventListener('touchstart', handleMouseDown);
+		window.addEventListener('touchend', handleMouseUp);
+		wrapper.addEventListener('touchmove', handleMouseMove);
 
 		window.addEventListener('resize', recalculateSize);
 
 		const cleanup = () => {
 			wrapper.removeEventListener('mousedown', handleMouseDown);
-			window.removeEventListener('mouseup', handleUp);
+			window.removeEventListener('mouseup', handleMouseUp);
 			wrapper.removeEventListener('mousemove', handleMouseMove);
 
-			// wrapper.removeEventListener('touchstart', handleTouchDown);
-			// window.removeEventListener('touchend', handleUp);
-			// wrapper.removeEventListener('touchmove', handleTouchMove);
+			wrapper.removeEventListener('touchstart', handleMouseDown);
+			window.removeEventListener('touchend', handleMouseUp);
+			wrapper.removeEventListener('touchmove', handleMouseMove);
 
 			window.removeEventListener('resize', recalculateSize);
 		};
 
 		return cleanup;
-	}, [images, handleUp]);
+	}, [images.length, handleMouseUp]);
 
 	return (
 		<div className={style.slider}>
@@ -115,16 +120,28 @@ export default function Slider({ images }) {
 			{currentSlide && (
 				<button
 					onClick={() => slideElement(false)}
+					onTouchEnd={() => slideElement(false)}
 					className={`${style.slider__btn} ${style.slider__btn__left}`}>
-					<Image src={left} alt={'left'} data-button='nav' />
+					<Image
+						src={left}
+						alt={'left'}
+						data-button='nav'
+						className={style.slider__btn__img}
+					/>
 				</button>
 			)}
 
 			{currentSlide < images.length - 1 && (
 				<button
 					onClick={() => slideElement(true)}
+					onTouchEnd={() => slideElement(true)}
 					className={`${style.slider__btn} ${style.slider__btn__right}`}>
-					<Image src={right} alt={'right'} data-button='nav' />
+					<Image
+						src={right}
+						alt={'right'}
+						data-button='nav'
+						className={style.slider__btn__img}
+					/>
 				</button>
 			)}
 		</div>
