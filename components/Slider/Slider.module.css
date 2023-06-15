@@ -8,16 +8,18 @@
   border: 1px solid grey;
   cursor: pointer;
   box-sizing: content-box;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 .slider__wrapper {
   display: flex;
   background-color: rgba(0, 0, 255, 0.19);
   height: 100%;
+  transform: translate(0%);
 }
 
 .slider__item {
+  flex-shrink: 0;
   height: 100%;
   width: var(--slider-width)
 }
