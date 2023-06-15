@@ -3,12 +3,16 @@ import Head from 'next/head';
 import p1 from 'public/images/p1.png';
 import p2 from 'public/images/p2.png';
 import p3 from 'public/images/p3.png';
+import p4 from 'public/images/p4.png';
+import p5 from 'public/images/p5.png';
 
 export default function Home() {
 	const images = [
 		{ src: p1, alt: 'Description 1' },
 		{ src: p2, alt: 'Description 2' },
 		{ src: p3, alt: 'Description 3' },
+		{ src: p4, alt: 'Description 4' },
+		{ src: p5, alt: 'Description 5' },
 	];
 
 	return (

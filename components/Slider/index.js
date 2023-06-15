@@ -1,6 +1,8 @@
 import style from './Slider.module.css';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import left from '/public/icons/arrow-left.svg';
+import right from '/public/icons/arrow-right.svg';
 
 export default function Slider({ images }) {
 	const wrapperRef = useRef();
@@ -9,6 +11,7 @@ export default function Slider({ images }) {
 	const isMoveLeft = useRef(true);
 	const shift = useRef(0);
 	const slideNumberRef = useRef(0);
+	const [currentSlide, setCurrentSlide] = useState(slideNumberRef.current);
 
 	const handleMouseDown = (e) => {
 		e.preventDefault();
@@ -28,31 +31,42 @@ export default function Slider({ images }) {
 			e.clientX - startMousePosition.current < 0 ? true : false;
 	};
 
-	const handleUp = (e) => {
-		e.preventDefault();
-		isClicked.current = false;
-		slideElement(isMoveLeft.current);
-	};
-
-	const slideElement = (moveLeft) => {
-		const wrapper = wrapperRef.current;
-		wrapper.style.transition = '0.2s ease-in-out';
-		if (moveLeft && slideNumberRef.current < images.length - 1) {
-			slideNumberRef.current++;
-		} else if (!moveLeft && slideNumberRef.current > 0) {
-			slideNumberRef.current--;
-		}
-		wrapper.style.transform = `translateX(-${slideNumberRef.current * 100}%)`;
-		shift.current = wrapper.offsetHeight;
-
-		setTimeout(() => {
-			wrapper.style.transition = '0s ease-in-out';
-		}, 200);
-	};
-
 	const recalculateSize = (e) => {
 		shift.current = wrapperRef.current.offsetHeight;
 	};
+
+	const slideElement = useCallback(
+		(moveLeft) => {
+			const wrapper = wrapperRef.current;
+			wrapper.style.transition = '0.2s ease-in-out';
+
+			if (moveLeft && slideNumberRef.current < images.length - 1) {
+				slideNumberRef.current++;
+				setCurrentSlide(slideNumberRef.current);
+			} else if (!moveLeft && slideNumberRef.current > 0) {
+				slideNumberRef.current--;
+				setCurrentSlide(slideNumberRef.current);
+			}
+
+			wrapper.style.transform = `translateX(-${slideNumberRef.current * 100}%)`;
+			shift.current = wrapper.offsetHeight;
+
+			setTimeout(() => {
+				wrapper.style.transition = '0s ease-in-out';
+			}, 200);
+		},
+		[images.length],
+	);
+
+	const handleUp = useCallback(
+		(e) => {
+			e.preventDefault();
+			isClicked.current = false;
+			if (e.target.dataset.button === 'nav') return;
+			slideElement(isMoveLeft.current);
+		},
+		[slideElement],
+	);
 
 	useEffect(() => {
 		const wrapper = wrapperRef.current;
@@ -78,7 +92,9 @@ export default function Slider({ images }) {
 
 			window.removeEventListener('resize', recalculateSize);
 		};
-	});
+
+		return cleanup;
+	}, [images, handleUp]);
 
 	return (
 		<div className={style.slider}>
@@ -95,6 +111,22 @@ export default function Slider({ images }) {
 					</div>
 				))}
 			</div>
+
+			{currentSlide && (
+				<button
+					onClick={() => slideElement(false)}
+					className={`${style.slider__btn} ${style.slider__btn__left}`}>
+					<Image src={left} alt={'left'} data-button='nav' />
+				</button>
+			)}
+
+			{currentSlide < images.length - 1 && (
+				<button
+					onClick={() => slideElement(true)}
+					className={`${style.slider__btn} ${style.slider__btn__right}`}>
+					<Image src={right} alt={'right'} data-button='nav' />
+				</button>
+			)}
 		</div>
 	);
 }
