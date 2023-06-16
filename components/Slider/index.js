@@ -63,6 +63,7 @@ export default function Slider({ images }) {
 
 			wrapper.style.transform = `translateX(-${slideNumberRef.current * 100}%)`;
 			shift.current = wrapper.offsetHeight;
+			moveDirection.current = null;
 
 			setTimeout(() => {
 				wrapper.style.transition = '0s';
@@ -76,7 +77,6 @@ export default function Slider({ images }) {
 			e.preventDefault();
 			isClicked.current = false;
 			if (e.target.dataset.button === 'nav') return;
-			if (!e.target.dataset.img) moveDirection.current = null;
 			changeSlide(moveDirection.current);
 		},
 		[changeSlide],
