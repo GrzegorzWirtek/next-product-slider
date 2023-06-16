@@ -154,6 +154,16 @@ export default function Slider({ images }) {
 					/>
 				</button>
 			)}
+
+			<div className={style.slider__dots}>
+				{images.map((_, index) => (
+					<div
+						key={index}
+						className={`${style.slider__dot} ${
+							index === currentSlide && style.slider__dot__active
+						}`}></div>
+				))}
+			</div>
 		</div>
 	);
 }
