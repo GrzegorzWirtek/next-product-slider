@@ -6,12 +6,12 @@ import right from '/public/icons/arrow-right.svg';
 
 export default function Slider({ images }) {
 	const minimumPxShiftToChangeSlide = 80;
-	const transitionTimeSeconds = 0.2;
+	const transitionTimeSeconds = 0.14;
 
 	const wrapperRef = useRef();
 	const isClicked = useRef(false);
 	const startMousePosition = useRef(0);
-	const isMoveLeft = useRef(null);
+	const moveDirection = useRef(null);
 	const shift = useRef(0);
 	const slideNumberRef = useRef(0);
 	const [currentSlide, setCurrentSlide] = useState(slideNumberRef.current);
@@ -35,20 +35,20 @@ export default function Slider({ images }) {
 		wrapperRef.current.style.transform = `translateX(${movement}px)`;
 
 		if (clientX - startMousePosition.current < -minimumPxShiftToChangeSlide) {
-			isMoveLeft.current = 'left';
+			moveDirection.current = 'left';
 		} else if (
 			clientX - startMousePosition.current >
 			minimumPxShiftToChangeSlide
 		) {
-			isMoveLeft.current = 'right';
-		} else isMoveLeft.current = null;
+			moveDirection.current = 'right';
+		} else moveDirection.current = null;
 	};
 
 	const recalculateSize = (e) => {
 		shift.current = wrapperRef.current.offsetHeight;
 	};
 
-	const slideElement = useCallback(
+	const changeSlide = useCallback(
 		(moveLeft) => {
 			const wrapper = wrapperRef.current;
 			wrapper.style.transition = `${transitionTimeSeconds}s`;
@@ -76,9 +76,10 @@ export default function Slider({ images }) {
 			e.preventDefault();
 			isClicked.current = false;
 			if (e.target.dataset.button === 'nav') return;
-			slideElement(isMoveLeft.current);
+			if (!e.target.dataset.img) moveDirection.current = null;
+			changeSlide(moveDirection.current);
 		},
-		[slideElement],
+		[changeSlide],
 	);
 
 	useEffect(() => {
@@ -119,6 +120,7 @@ export default function Slider({ images }) {
 							alt={img.alt}
 							height={'auto'}
 							width={'auto'}
+							data-img='img'
 							className={style.slider__img}
 						/>
 					</div>
@@ -127,8 +129,8 @@ export default function Slider({ images }) {
 
 			{currentSlide && (
 				<button
-					onClick={() => slideElement('right')}
-					onTouchEnd={() => slideElement('right')}
+					onClick={() => changeSlide('right')}
+					onTouchEnd={() => changeSlide('right')}
 					className={`${style.slider__btn} ${style.slider__btn__left}`}>
 					<Image
 						src={left}
@@ -141,8 +143,8 @@ export default function Slider({ images }) {
 
 			{currentSlide < images.length - 1 && (
 				<button
-					onClick={() => slideElement('left')}
-					onTouchEnd={() => slideElement('left')}
+					onClick={() => changeSlide('left')}
+					onTouchEnd={() => changeSlide('left')}
 					className={`${style.slider__btn} ${style.slider__btn__right}`}>
 					<Image
 						src={right}
