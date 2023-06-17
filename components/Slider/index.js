@@ -1,13 +1,12 @@
 import style from './Slider.module.css';
 import Image from 'next/image';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import left from '/public/icons/arrow-left.svg';
 import right from '/public/icons/arrow-right.svg';
 
 export default function Slider({ images }) {
 	const minimumPxShiftToChangeSlide = 80;
 	const transitionTimeSeconds = 0.14;
-
 	const wrapperRef = useRef();
 	const isClicked = useRef(false);
 	const startMousePosition = useRef(0);
