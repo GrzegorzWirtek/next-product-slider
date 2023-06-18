@@ -1,4 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;500&family=Mukta:wght@200;300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1,
+p {
+  font-family: 'Kanit', sans-serif;
+  font-family: 'Mukta', sans-serif;
+  line-height: 1.2;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+p {
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
 :root {
   --slider-size-mobile: 90vw;
-  --slider-size: 40vw;
+  --slider-size: 35vw;
 }

@@ -4,7 +4,7 @@
 
 Responsive image slider component for e-commerce products, created by and for **Next.js** applications.
 
-Visit page: **[Next image slider](https://todo-nextjs-mongoodb.vercel.app/)**
+Visit page: **[Next image slider](https://next-image-slider.vercel.app/)**
 
 ## General info
 
@@ -28,10 +28,10 @@ $ npm run dev
 
 ### Folders and files to copy:
 
-**Slider** folder - copy and paste "Slider" folder from/to path **components/Slider**
-**global.css** file - copy and replace the file, or add code containing css variables to the existing "global.css" file
-**icons** folder - copy and paste "icons" folder from/to path **public/icons**
-Create **image** folder in the **public** path and paste there all the graphics you will use to display in the slider
+- **Slider** folder - copy and paste "Slider" folder from/to path **components/Slider**
+- **global.css** file - copy and replace the file, or add code containing css variables to the existing "global.css" file
+- **icons** folder - copy and paste "icons" folder from/to path **public/icons**
+- Create **image** folder in the **public** path and paste there all the graphics you will use to display in the slider
 
 ![next-slider-project-structure](https://github.com/GrzegorzWirtek/next-product-slider/assets/83970189/4ae7cc20-4c30-4e03-a77a-a0deda399502)
 
