@@ -75,7 +75,6 @@ export default function Slider({ images }) {
 		(e) => {
 			e.preventDefault();
 			isClicked.current = false;
-			if (e.target.dataset.button === 'nav') return;
 			changeSlide(moveDirection.current);
 		},
 		[changeSlide],
