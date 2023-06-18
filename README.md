@@ -4,7 +4,7 @@
 
 Responsive image slider component for e-commerce products, created by and for **Next.js** applications.
 
-Visit page: **[Next image slider](https://next-image-slider.vercel.app/)**
+Visit page: **[Next image slider](https://next-image-slider-mu.vercel.app/)**
 
 ## General info
 
