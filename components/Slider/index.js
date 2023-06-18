@@ -119,6 +119,7 @@ export default function Slider({ images }) {
 							alt={img.alt}
 							height={'auto'}
 							width={'auto'}
+							priority={'true'}
 							data-img='img'
 							className={style.slider__img}
 						/>
