@@ -116,8 +116,8 @@ export default function Slider({ images }) {
 						<Image
 							src={img.src}
 							alt={img.alt}
-							height={'auto'}
-							width={'auto'}
+							height={0}
+							width={0}
 							priority={'true'}
 							data-img='img'
 							className={style.slider__img}
